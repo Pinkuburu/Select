@@ -8,11 +8,14 @@ public class Code : MonoBehaviour
     public Text Result;
     public float Acceleration;
 
+    public float Timer;
+    private float timer;
+
 
     //加速度相关的变量
     float old_y = 0.0f;
     float new_y = 0.0f;
-    float d_y = 0.0f;
+    float result_y = 0.0f;
 
 
     // Use this for initialization
@@ -20,27 +23,32 @@ public class Code : MonoBehaviour
     {
         Result.text = "无";
 
+        timer = 0;
+
     }
 
     // Update is called once per frame
     void Update()
     {
         new_y = Input.acceleration.y;
-        d_y = new_y - old_y;
+        result_y = new_y - old_y;
         old_y = new_y;
+
+        timer -= Time.deltaTime;
 
         if (Mode1.isOn)
         {
-            if (Result.text != "无")
+            if (Result.text == "正" && Result.text == "反")
             {
                 Result.text = "无";
             }
-            if (d_y > Acceleration)
+            if (result_y > Acceleration&&timer<=0)
             {
+                
                 Handheld.Vibrate();//震动效果
                 int ra1 = Random.Range(1, 100);
                 Result.text = ra1.ToString();
-
+                timer = Timer;
 
             }
 
@@ -51,8 +59,9 @@ public class Code : MonoBehaviour
             {
                 Result.text = "无";
             }
-            if (d_y > Acceleration)
+            if (result_y > Acceleration && timer <= 0)
             {
+                
                 Handheld.Vibrate();//震动效果
                 float ra1 = Random.Range(0, 2);
 
@@ -66,6 +75,7 @@ public class Code : MonoBehaviour
                 {
                     Result.text = "反";
                 }
+                timer = Timer;
             }
         }
     }
